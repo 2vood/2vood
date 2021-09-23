@@ -1,0 +1,228 @@
+
+import pandas as pd
+import os
+import numpy as np
+import tkinter as tk
+from IPython.display import display
+from ipywidgets import Dropdown
+from ipywidgets import DatePicker
+from ipywidgets import Button 
+
+
+#Переименновываем все файлы в директории для дальнешей работы
+path = r"by\\"
+f = os.listdir(path)
+n = 0
+your_name = "total_by"
+format = '.xlsx'
+ 
+for i in f:
+    oldname = path + f[n]
+    print(oldname)
+    newname = path + your_name + str(n + 1) + format
+    os.rename(oldname, newname)
+    print(oldname, '======>', newname)
+ 
+    n += 1
+
+
+#Находим список активных клиентов
+ap_df = pd.read_excel("by\\total_by1.xlsx",sheet_name = 'Total',usecols=[0])
+
+#добавляем список активных клиентов на отдельный лист
+sheet_name = ap_df['Клиент'].tolist()
+
+#Считаем кол-во клиентов
+sheet_name_len = len(sheet_name)
+
+#открываем DF
+by_df = pd.read_excel("by\\total_by1.xlsx",sheet_name =sheet_name[1])
+
+# разбиваем файл на листы
+
+# основные данные
+client = by_df['Клиент'].tolist()
+supplier = by_df['Поставщик'].tolist()
+type_of_construction  = by_df['Тип конструкции'].tolist()
+city = by_df['Город'].tolist()
+size = by_df['Размер'].tolist()
+campaign = by_df['Кампания'].tolist()
+
+#данные от периода
+#данные клиента
+placement_tax = by_df['Налог на размещение'].tolist()
+cost_installation = by_df['Стоимость первичного монтажа net'].tolist()
+cost_add_installation = by_df['Стоимость доп. монтажа net'].tolist()
+installation_tax  = by_df['Налог на монтаж'].tolist()
+
+#Данные поставщика
+buyplacement_tax = by_df['Налог на размещение закупка'].tolist()
+buycost_installation = by_df['Стоимость первичного монтажа net'].tolist()
+buycost_add_installation = by_df['Стоимость доп. монтажа net'].tolist()
+buyinstallation_tax  = by_df['Налог на Монтаж закупка'].tolist()
+
+#периоды размещения
+january = by_df['Январь'].tolist()
+february = by_df['Февраль'].tolist()
+march = by_df['Март'].tolist()
+april = by_df['Апрель'].tolist()
+may = by_df['Май'].tolist()
+june = by_df['Июнь'].tolist()
+july = by_df['Июль'].tolist()
+august = by_df['Август'].tolist()
+september = by_df['Сентябрь'].tolist()
+october = by_df['Октябрь'].tolist()
+november = by_df['Ноябрь'].tolist()
+december = by_df['Декабрь'].tolist()
+
+#Продажа клиенту
+cost_january = by_df['Стоимость размещения Январь net'].tolist()
+cost_february = by_df['Стоимость размещения Февраль net'].tolist()
+cost_march = by_df['Стоимость размещения Март net'].tolist()
+cost_april = by_df['Стоимость размещения Апрель net'].tolist()
+cost_may = by_df['Стоимость размещения Май net'].tolist()
+cost_june = by_df['Стоимость размещения Июнь net'].tolist()
+cost_july = by_df['Стоимость размещения Июль net'].tolist()
+cost_august = by_df['Стоимость размещения Август net'].tolist()
+cost_september = by_df['Стоимость размещения Сентябрь net'].tolist()
+cost_october = by_df['Стоимость размещения Октябрь net'].tolist()
+cost_november = by_df['Стоимость размещения Ноябрь net'].tolist()
+cost_december = by_df['Стоимость размещения Декабрь net'].tolist()
+
+#Закупка
+buycost_january = by_df['закупка Январь net'].tolist()
+buycost_february = by_df['закупка Февраль net'].tolist()
+buycost_march = by_df['закупка Март net'].tolist()
+buycost_april = by_df['закупка Апрель net'].tolist()
+buycost_may = by_df['закупка Май net'].tolist()
+buycost_june = by_df['закупка Июнь net'].tolist()
+buycost_july = by_df['закупка Июль net'].tolist()
+buycost_august = by_df['закупка Август net'].tolist()
+buycost_september = by_df['закупка Сентябрь net'].tolist()
+buycost_october = by_df['закупка Октябрь net'].tolist()
+buycost_november = by_df['закупка Ноябрь net'].tolist()
+buycost_december = by_df['закупка Декабрь net'].tolist()
+
+
+
+#Выбираем месяц закупки
+Month = ['0','январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь',"ноябрь","декабрь"]
+
+dropdown1 = Dropdown(
+    options= Month,
+    description='Месяц:' 
+)
+
+def on_button_clicked(b_month):
+    b_month['new']
+
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+# дата старта РК и окончания РК
+#старт
+
+day = [i for i in range(32)]
+
+dropdown1 = Dropdown(
+    options= day,
+    description='Старт:' 
+)
+
+def on_button_clicked(b_start):
+    b_start['new']
+    
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+#финиш
+
+
+dropdown1 = Dropdown(
+    options= day,
+    description='Финиш:' 
+)
+
+def on_button_clicked(b_finish):
+    b_finish['new']
+
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+
+#Ответсвенный
+
+responsible_choice = []
+responsible = ['0','Акимова','Астафьева','Афанасьев','Башук','Винцковский','Гаврюшин','Горбанёв','Гришина','Гусева','Дениско','Долгов',
+'Заманова','Зубач','Зюба','Ионов','Катасонов','Климушина','Крашенинин','Кротов','Кузьменко','Ларькина','Мирцхулава','Михайлова','Приходько','Пузикова','Сакаева','Синицына','Синкевич','Смирнова','Файзулин','Фильшина','Хомутенко','Черняк','Шевелев']
+
+responsible_gh = ['0','Афанасьев','Гусева','Дениско','Докучаева','Долгов','Елисова','Зубач','Ионов','Климушина','Пузикова','Шевелев']
+
+
+dropdown1 = Dropdown(
+    options= responsible,
+    description='Отв.:' 
+)
+
+def on_button_clicked(b_resp):
+    responsible_choice.append(b_resp['new'])
+    
+
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+
+dropdown1 = Dropdown(
+    options= responsible_gh,
+    description='ГХ:' 
+)
+
+def on_button_clicked(b_resp_gh):
+    b_resp_gh['new']
+
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+
+#выбрать агентсво
+agency = ['0','OMD','PHD' ,'Media Wise' ,'COT', 'Proximity' ,'SOLID' ,'Hedliner']
+
+dropdown1 = Dropdown(
+    options= agency,
+    description='Агент:' 
+)
+
+def on_button_clicked(b_agency):
+    b_agency['new']
+
+dropdown1.observe(on_button_clicked, names='value')
+display(dropdown1)
+
+
+
+
+dax = [0]
+type_media = ['outdoor']
+service = ['размещение']
+
+
+dataframe = {
+    'Ответсвенный': responsible_choice
+}
+
+
+# Создаем кнопку с нужными параметрами
+button1 = Button(description="Нажми меня!", 
+                        button_style='success' # 'success', 'info', 'warning', 'danger', ''
+                        )
+
+def on_button_clicked(b): # Описываем обработчик события
+    print(dataframe)
+
+button1.on_click(on_button_clicked) # Назначаем этот обработчик на событие "on_click"
+
+display(button1) # Отображаем кнопку
+
+
+
+
